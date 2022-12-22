@@ -1,13 +1,14 @@
-import React from "react"
-import "./App.css"
+import React from "react";
+
+import "./App.css";
+import { HomePage } from "./pages/HomePage";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">React Helsinki Places App - Extra assignment</header>
-     
+      <HomePage />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
