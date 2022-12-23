@@ -9,6 +9,7 @@ import axios from "axios";
 import { IResource, dataState } from "../../types/placesTypes";
 
 const page: number = 10;
+//const url: string = `https://hauki.api.hel.fi/v1/resource/?format=json&page=${page}`;
 const url: string = `https://hauki.api.hel.fi/v1/resource/?format=json&page=${page}`;
 
 export async function getData() {
@@ -17,6 +18,8 @@ export async function getData() {
   console.log(response.data);
   if (response.status < 400) {
     return response.data;
+    console.log(response.data)
+
   } else {
     throw new Error(response.status + " " + response.statusText);
   }
