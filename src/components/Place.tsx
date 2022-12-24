@@ -3,7 +3,7 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { useAppSelector } from "../app/hooks";
-import { dataState, IResult } from "../types/placesTypes";
+import { dataState } from "../types/placesTypes";
 
 type tPos = {
   lng: number;
@@ -39,24 +39,25 @@ const data = [
 ];
 
 export default function Place(): JSX.Element {
-  const result: dataState = useAppSelector(function (state) {
-    return state.data;
-  });
-  const [pos, setPos] = useState<tPos>({
-    lng: 24.947108117393643,
-    lat: 60.18337277411394,
-    zoom: 12,
-  });
-
   const mapContainer = useRef<any>(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
+  const result: dataState = useAppSelector(function (state) {
+    return state.data;
+  });
+
+  const [pos, setPos] = useState<tPos>({
+    lng: 24.93859365199683,
+    lat: 60.17197106567035,
+    zoom: 12,
+  });
+
   useEffect(() => {
-    if (map.current) return; // initialize map only once
+    if (map.current) return;
+
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v12",
-      accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
       center: [pos.lng, pos.lat],
       zoom: pos.zoom,
     })
@@ -83,6 +84,20 @@ export default function Place(): JSX.Element {
           )
         )
         .addTo(map.current!);
+    });
+  });
+
+  useEffect(() => {
+    if (!map.current) return;
+
+    const newPos: tPos = {
+      lng: Number(map.current.getCenter().lng.toFixed(12)),
+      lat: Number(map.current.getCenter().lat.toFixed(12)),
+      zoom: Number(map.current.getZoom().toFixed(2)),
+    };
+
+    map.current.on("move", () => {
+      setPos(newPos);
     });
   });
 
