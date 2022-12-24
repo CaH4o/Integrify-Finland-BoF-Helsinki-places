@@ -6,20 +6,16 @@ import {
 } from "@reduxjs/toolkit";
 import axios from "axios";
 
-import { IResource, dataState } from "../../types/placesTypes";
+import { IResponse, IPlacesState } from "../../types/placesTypes";
 
-const page: number = 10;
-//const url: string = `https://hauki.api.hel.fi/v1/resource/?format=json&page=${page}`;
-const url: string = `https://hauki.api.hel.fi/v1/resource/?format=json&page=${page}`;
+const url: string = "https://open-api.myhelsinki.fi/v2/places/";
 
 export async function getData() {
   const response = await axios.get(url);
-
   console.log(response.data);
+
   if (response.status < 400) {
     return response.data;
-    console.log(response.data)
-
   } else {
     throw new Error(response.status + " " + response.statusText);
   }
@@ -27,13 +23,15 @@ export async function getData() {
 
 export const getDataThunk = createAsyncThunk("getData", getData);
 
-const initialState: dataState = {
+const initialState: IPlacesState = {
   loading: false,
   error: false,
-  data: [],
+  places: [],
+  tags: [],
+  count: 0,
 };
 
-const dataSlicer: Slice = createSlice({
+const placesSlicer: Slice = createSlice({
   name: "data",
   initialState,
   reducers: {},
@@ -41,18 +39,21 @@ const dataSlicer: Slice = createSlice({
     builder
       .addCase(
         getDataThunk.fulfilled,
-        function (state: dataState, action: PayloadAction<IResource>) {
-          state.data.push(action.payload);
+        function (state: IPlacesState, action: PayloadAction<IResponse>) {
+          state.count = Number(action.payload.meta.count);
+          state.places = action.payload.data;
+          state.tags = action.payload.tags;
+          state.loading = false;
         }
       )
-      .addCase(getDataThunk.rejected, function (state: dataState) {
+      .addCase(getDataThunk.rejected, function (state: IPlacesState) {
         state.error = true;
         state.loading = false;
       })
-      .addCase(getDataThunk.pending, function (state: dataState) {
+      .addCase(getDataThunk.pending, function (state: IPlacesState) {
         state.loading = true;
       });
   },
 });
 
-export const dataReducer = dataSlicer.reducer;
+export const placesReducer = placesSlicer.reducer;

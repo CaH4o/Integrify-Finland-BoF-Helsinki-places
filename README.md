@@ -27,5 +27,7 @@ react-mapbox-gl - add map into react app:
 https://docs.mapbox.com/help/tutorials/use-mapbox-gl-js-with-react/
 to store a token in env:
 https://create-react-app.dev/docs/adding-custom-environment-variables/
+api of places ant types of data
+https://open-api.myhelsinki.fi/doc#/
 
 

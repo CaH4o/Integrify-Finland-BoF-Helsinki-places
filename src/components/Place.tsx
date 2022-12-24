@@ -3,7 +3,7 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { useAppSelector } from "../app/hooks";
-import { dataState } from "../types/placesTypes";
+import { IPlacesState } from "../types/placesTypes";
 
 type tPos = {
   lng: number;
@@ -42,8 +42,8 @@ export default function Place(): JSX.Element {
   const mapContainer = useRef<any>(null);
   const map = useRef<mapboxgl.Map | null>(null);
 
-  const result: dataState = useAppSelector(function (state) {
-    return state.data;
+  const places: IPlacesState = useAppSelector(function (state) {
+    return state.places;
   });
 
   const [pos, setPos] = useState<tPos>({
@@ -85,6 +85,8 @@ export default function Place(): JSX.Element {
         )
         .addTo(map.current!);
     });
+
+    //return () => map.current?.remove();
   });
 
   useEffect(() => {
@@ -104,7 +106,9 @@ export default function Place(): JSX.Element {
   return (
     <div>
       <div className="sidebar">
-        Longitude: {pos.lng} | Latitude: {pos.lat} | Zoom: {pos.zoom}
+        Longitude: {pos.lng} <br />
+        Latitude:&nbsp; {pos.lat} <br />
+        Zoom: &nbsp;&nbsp;&nbsp;&nbsp; {pos.zoom}
       </div>
       <div ref={mapContainer} className="map-container" />
     </div>

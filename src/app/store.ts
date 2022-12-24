@@ -1,9 +1,9 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
-import { dataReducer } from "../redux/places/placesSlice";
+import { placesReducer } from "../redux/places/placesSlice";
 
 export const store = configureStore({
-  reducer: { data:dataReducer },
+  reducer: { places:placesReducer },
 });
 
 export type AppDispatch = typeof store.dispatch;
