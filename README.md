@@ -23,11 +23,13 @@ Reference:
 https://user-images.githubusercontent.com/48591371/203028142-448ceb1f-4f84-4a87-8a51-b97ce0cd4dd4.mov
 
 - Links I used:
-react-mapbox-gl - add map into react app:
+* react-mapbox-gl - add map into react app:
 https://docs.mapbox.com/help/tutorials/use-mapbox-gl-js-with-react/
-to store a token in env:
+* to store a token in env:
 https://create-react-app.dev/docs/adding-custom-environment-variables/
-api of places ant types of data
+* api of places ant types of data
 https://open-api.myhelsinki.fi/doc#/
-
-
+* added proxy to solve "Cross-Origin Request Blocked"
+https://www.npmjs.com/package/http-proxy-middleware
+https://create-react-app.dev/docs/proxying-api-requests-in-development
+$ npm install --save-dev http-proxy-middleware

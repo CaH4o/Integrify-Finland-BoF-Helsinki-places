@@ -8,11 +8,10 @@ import axios from "axios";
 
 import { IResponse, IPlacesState } from "../../types/placesTypes";
 
-const url: string = "https://open-api.myhelsinki.fi/v2/places/";
+const url: string = "/v2/places/";
 
 export async function getData() {
-  const response = await axios.get(url);
-  console.log(response.data);
+  const response = await axios.get(url)
 
   if (response.status < 400) {
     return response.data;
