@@ -21,7 +21,7 @@ export interface IDescription {
   images: IImage[];
 }
 
-export interface ITeg {
+export interface ITag {
   id: string;
   name: string;
 }
@@ -37,26 +37,30 @@ export interface IPlace {
   id: string;
   name: IName;
   location: ILocation;
-  infoUrl: string;
+  info_url: string;
   description: IDescription;
-  tags: ITeg[];
-  openingHoursUrl: string;
+  tags: ITag[];
+  opening_hours_url: string;
 }
 
-export type tTeg = { [key: string]: string };
+export type tTag = { [id: string]: string };
 
 export interface IResponse {
   meta: {
     count: string;
   };
   data: IPlace[];
-  tags: tTeg[];
+  tags: tTag;
 }
 
 export interface IPlacesState {
   loading: boolean;
   error: boolean;
   places: IPlace[];
-  tags: tTeg[];
+  present: IPlace[];
+  tags: tTag;
   count: number;
+  filters: {
+    tagID: string;
+  };
 }

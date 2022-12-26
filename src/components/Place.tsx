@@ -2,8 +2,8 @@ import { useRef, useState, useEffect } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 
+import { IPlace, IPlacesState } from "../types/placesTypes";
 import { useAppSelector } from "../app/hooks";
-import { IPlacesState } from "../types/placesTypes";
 
 type tPos = {
   lng: number;
@@ -11,45 +11,23 @@ type tPos = {
   zoom: number;
 };
 
-const data = [
-  {
-    location: "location 1",
-    coordinate: {
-      lng: 25.0,
-      lat: 60.2,
-    },
-    address: "address 1",
-  },
-  {
-    location: "location 2",
-    coordinate: {
-      lng: 25.1,
-      lat: 60.1,
-    },
-    address: "address 2",
-  },
-  {
-    location: "location 3",
-    coordinate: {
-      lng: 24.9,
-      lat: 60.0,
-    },
-    address: "address 3",
-  },
-];
+type tMarker = mapboxgl.Marker;
+type tMap = mapboxgl.Map;
 
 export default function Place(): JSX.Element {
   const mapContainer = useRef<any>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
+  const map = useRef<tMap | null>(null);
+  const [markers, setMarkers] = useState<string[]>([]);
 
-  const places: IPlacesState = useAppSelector(function (state) {
+  const placesState: IPlacesState = useAppSelector(function (state) {
     return state.places;
   });
+  const places: IPlace[] = placesState.present;
 
   const [pos, setPos] = useState<tPos>({
     lng: 24.93859365199683,
     lat: 60.17197106567035,
-    zoom: 12,
+    zoom: 10,
   });
 
   useEffect(() => {
@@ -57,37 +35,64 @@ export default function Place(): JSX.Element {
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v12",
+      style: "mapbox://styles/cah4o/clc4qtbf3007214s1pmwa8xle",
       center: [pos.lng, pos.lat],
       zoom: pos.zoom,
     })
       .addControl(new mapboxgl.FullscreenControl(), "top-right")
       .addControl(new mapboxgl.NavigationControl(), "bottom-right");
+  }, []);
 
-    const markerHel = new mapboxgl.Marker()
-      .setLngLat([24.947108117393643, 60.18337277411394])
-      .setPopup(
-        new mapboxgl.Popup({ offset: 30 }).setHTML(
-          "<h4>" + "Helsinki" + "</h4>"
-        )
-      )
-      .addTo(map.current);
+  useEffect(
+    function () {
+      if (!map.current || !places.length) return;
 
-    data.forEach(function (place) {
-      const marker = new mapboxgl.Marker()
-        .setLngLat(place.coordinate)
-        .setPopup(
-          new mapboxgl.Popup({ offset: 30 }).setHTML(
-            ""
-              .concat("<h4>" + place.location + "</h4>")
-              .concat("<p>" + place.address + "</p>")
-          )
-        )
-        .addTo(map.current!);
-    });
+      places.forEach(function (place: IPlace) {
+        if (!markers.includes(place.id)) {
+          const el = document.createElement("div");
+          el.id = place.id;
+          el.className = "marker";
+          el.addEventListener("click", function () {
+            this.classList.add("clicked");
+          });
 
-    //return () => map.current?.remove();
-  });
+          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+            '<div class="popup">'
+              .concat(
+                place.description.images.length
+                  ? '<img src="' + place.description.images[0].url + '" >'
+                  : ""
+              )
+              .concat("<h3>" + place.name.en + "</h3>")
+              .concat("<p>" + place.description.intro + "</p>")
+              .concat(
+                '<a href="' +
+                  place.info_url +
+                  '" target="_blank">Link to site</a>'
+              )
+              .concat("</div>")
+          );
+
+          new mapboxgl.Marker(el)
+            .setLngLat({ lon: place.location.lon, lat: place.location.lat })
+            .setPopup(popup)
+            .addTo(map.current!);
+        }
+
+        const removeMarkers: string[] = markers;
+        const addMarkers: string[] = places.map(function (p: IPlace) {
+          return p.id;
+        });
+
+        removeMarkers.forEach(function (id: string) {
+          const el = document.getElementById(id);
+          el?.remove();
+        });
+        setMarkers(addMarkers);
+      });
+    },
+    [places, map.current]
+  );
 
   useEffect(() => {
     if (!map.current) return;

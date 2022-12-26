@@ -16,8 +16,13 @@
   font-size: calc(10px + 2vmin);
 }
 
+.App-header h4,
+p {
+  margin: 2px;
+}
+
 .map-container {
-  min-height: 70vh;
+  min-height: 80vh;
 }
 
 .sidebar {
@@ -31,4 +36,36 @@
   border-radius: 4px;
   text-align: left;
   min-width: 200px;
-  }
+}
+
+.marker {
+  background-image: url("/svg/pointer.svg");
+  background-size: contain;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+.clicked {
+  filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(346deg)
+    brightness(104%) contrast(97%);
+}
+
+.mapboxgl-popup {
+  max-width: 600px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: 0.3s;
+  border-radius: 10px;
+}
+
+.popup {
+  font-size: medium;
+  margin: 0;
+}
+
+.popup img {
+  width: 200px;
+}
