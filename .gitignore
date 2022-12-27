@@ -24,3 +24,5 @@ yarn-error.log*
 
 # token
 /src/app/token.ts
+# Local Netlify folder
+.netlify

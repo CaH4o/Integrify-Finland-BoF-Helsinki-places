@@ -44,10 +44,7 @@ const placesSlicer: Slice = createSlice({
     ) {
       state.filters.tagID = action.payload;
     },
-    updatePresent: function (
-      state: IPlacesState,
-      action: PayloadAction<string>
-    ) {
+    updatePresent: function (state: IPlacesState) {
       state.present = state.places.filter(function (p: IPlace) {
         const tagsID: string[] = [];
         p.tags.forEach(function (t: ITag) {

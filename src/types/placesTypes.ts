@@ -1,6 +1,6 @@
 export interface IAddress {
-  streetAddress: string;
-  postalCode: string;
+  street_address: string;
+  postal_code: string;
   locality: string;
   neighbourhood: string;
 }

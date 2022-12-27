@@ -11,7 +11,7 @@ type tPos = {
   zoom: number;
 };
 
-type tMarker = mapboxgl.Marker;
+type tPopup = mapboxgl.Popup;
 type tMap = mapboxgl.Map;
 
 export default function Place(): JSX.Element {
@@ -49,14 +49,14 @@ export default function Place(): JSX.Element {
 
       places.forEach(function (place: IPlace) {
         if (!markers.includes(place.id)) {
-          const el = document.createElement("div");
+          const el: HTMLDivElement = document.createElement("div");
           el.id = place.id;
           el.className = "marker";
           el.addEventListener("click", function () {
             this.classList.add("clicked");
           });
 
-          const popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
+          const popup: tPopup = new mapboxgl.Popup({ offset: 25 }).setHTML(
             '<div class="popup">'
               .concat(
                 place.description.images.length
@@ -64,6 +64,15 @@ export default function Place(): JSX.Element {
                   : ""
               )
               .concat("<h3>" + place.name.en + "</h3>")
+              .concat(
+                "<p>" +
+                  place.location.address.locality +
+                  ", " +
+                  place.location.address.street_address +
+                  " (" +
+                  place.location.address.postal_code +
+                  ")</p>"
+              )
               .concat("<p>" + place.description.intro + "</p>")
               .concat(
                 '<a href="' +
@@ -85,7 +94,7 @@ export default function Place(): JSX.Element {
         });
 
         removeMarkers.forEach(function (id: string) {
-          const el = document.getElementById(id);
+          const el: HTMLElement | null = document.getElementById(id);
           el?.remove();
         });
         setMarkers(addMarkers);

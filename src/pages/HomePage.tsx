@@ -27,7 +27,7 @@ export function HomePage(): JSX.Element {
 
   function handleChange(event: ChangeEvent<HTMLSelectElement>) {
     dispatch(updateFilterTag(event.target.value));
-    dispatch(updatePresent(""));
+    dispatch(updatePresent(null));
   }
 
   return (
